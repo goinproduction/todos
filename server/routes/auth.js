@@ -92,7 +92,7 @@ router.post('/login', async (req, res) => {
         if (!user)
             return res.status(400).json({
                 success: false,
-                messsage: 'Incorrect username or password',
+                message: 'Incorrect username or password',
             });
 
         // Username exists
@@ -100,7 +100,7 @@ router.post('/login', async (req, res) => {
         if (!validPassword)
             return res.status(400).json({
                 success: false,
-                messsage: 'Incorrect username or password',
+                message: 'Incorrect username or password',
             });
 
         // All good
