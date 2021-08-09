@@ -22,10 +22,10 @@ Content-Type: application/json
 Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MTBmZjRjY2RiN2YyNTIxNDRjOTJlNWUiLCJpYXQiOjE2Mjg0NDc3NzF9.SrV-MR85mHWBgamIrL21ae1m151BrrUL2aIU3B4i_xs
 
 {
-    "title": "ReactJS 3",
+    "title": "ReactJS",
     "description": "Learn ReactJS",
     "url":"www.reactjs.org",
-    "status": "LEARNING"
+    "status": "LEARNED"
 }
 
 ###

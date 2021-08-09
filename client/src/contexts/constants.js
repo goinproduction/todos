@@ -4,3 +4,6 @@ export const apiUrl =
         : 'deployURL';
 
 export const LOCAL_STORAGE_TOKEN_NAME = 'mern-app';
+
+export const POSTS_LOADED_SUCCESS = 'POST_LOADED_SUCCESS';
+export const POSTS_LOADED_FAIL = 'POSTS_LOADED_FAIL';
