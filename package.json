@@ -4,16 +4,19 @@
   "description": "",
   "main": "index.js",
   "dependencies": {},
-  "lint-staged": {
-    "src/**/*.{js,json,scss}": "prettier --single-quote --trailing-comma all --tab-width 4 --write"
-  },
   "devDependencies": {
-    "husky": "^7.0.1"
+    "husky": "^7.0.1",
+    "lint-staged": "^11.1.2",
+    "prettier": "^2.3.2"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "prepare": "husky install",
     "pre-commit": "lint-staged"
+  },
+  "lint-staged": {
+    "client/**/*.{js,json,scss}": "prettier --single-quote --trailing-comma all --tab-width 4 --write",
+    "server/**/*.{js,json,scss}": "prettier --single-quote --trailing-comma all --tab-width 4 --write"
   },
   "repository": {
     "type": "git",
