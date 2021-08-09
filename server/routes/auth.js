@@ -3,8 +3,27 @@ const router = express.Router();
 const argon2 = require('argon2');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const verifyToken = require('../middleware/auth');
 
-router.get('/', (req, res) => res.send('USER TEST'));
+// @route GET /api/auth
+// @desc Check if user is logged in
+// @access public
+router.get('/', verifyToken, async (req, res) => {
+    try {
+        const user = await User.findById(req.userId).select('-password');
+        if (!user)
+            return res
+                .status(400)
+                .json({ success: false, message: 'User not found' });
+        return res.json({ success: true, user });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            success: 'false',
+            message: 'Internal server error',
+        });
+    }
+});
 
 // @route POST /api/auth/register
 // @desc Register user
@@ -37,7 +56,7 @@ router.post('/register', async (req, res) => {
         // Return token
         const accessToken = jwt.sign(
             { userId: newUser._id },
-            process.env.ACCESS_TOKEN_SECRET
+            process.env.ACCESS_TOKEN_SECRET,
         );
 
         res.json({
@@ -87,7 +106,7 @@ router.post('/login', async (req, res) => {
         // All good
         const accessToken = jwt.sign(
             { userId: user._id },
-            process.env.ACCESS_TOKEN_SECRET
+            process.env.ACCESS_TOKEN_SECRET,
         );
         res.json({ success: true, message: 'Login successfully', accessToken });
     } catch (error) {

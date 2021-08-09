@@ -1,8 +1,9 @@
 // Quản lý state của components
-import { createContext, useReducer } from 'react';
+import { createContext, useReducer, useEffect } from 'react';
 import axios from 'axios';
 import { authReducer } from '../reducers/AuthReducer';
 import { apiUrl, LOCAL_STORAGE_TOKEN_NAME } from './constants';
+import setAuthToken from '../utils/setAuthToken';
 
 export const AuthContext = createContext();
 
@@ -12,6 +13,37 @@ const AuthContextProvider = ({ children }) => {
         isAuthenticated: false,
         user: null,
     });
+    // Authenticate user
+    const loadUser = async () => {
+        if (localStorage[LOCAL_STORAGE_TOKEN_NAME]) {
+            setAuthToken(localStorage[LOCAL_STORAGE_TOKEN_NAME]);
+        }
+
+        try {
+            const response = await axios.get(`${apiUrl}/auth`);
+            if (response.data.success) {
+                dispatch({
+                    type: 'SET_AUTH',
+                    payload: {
+                        isAuthenticated: true,
+                        user: response.data.user,
+                    },
+                });
+            }
+        } catch (error) {
+            localStorage.removeItem(LOCAL_STORAGE_TOKEN_NAME);
+            setAuthToken(null);
+            dispatch({
+                type: 'SET_AUTH',
+                payload: {
+                    user: null,
+                    isAuthenticated: false,
+                },
+            });
+        }
+    };
+
+    useEffect(() => loadUser(), []);
 
     // Login
     const loginUser = async (userForm) => {
@@ -30,7 +62,7 @@ const AuthContextProvider = ({ children }) => {
         }
     };
     // Context data
-    const authContextData = { loginUser };
+    const authContextData = { loginUser, authState };
 
     // Return provider
     return (

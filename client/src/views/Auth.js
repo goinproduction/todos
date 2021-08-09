@@ -1,16 +1,34 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import LoginForm from '../components/auth/LoginForm';
 import RegisterForm from '../components/auth/RegisterForm';
+import { AuthContext } from '../contexts/AuthContext';
+import { Redirect } from 'react-router-dom';
+import Spinner from 'react-bootstrap/Spinner';
 
 const Auth = ({ authRoute }) => {
+    const {
+        authState: { authLoading, isAuthenticated },
+    } = useContext(AuthContext);
+    console.log(authLoading, 'and', isAuthenticated);
+
     let body;
 
-    body = (
-        <>
-            {authRoute === 'login' && <LoginForm />}
-            {authRoute === 'register' && <RegisterForm />}
-        </>
-    );
+    if (authLoading) {
+        body = (
+            <div className="d-flex justify-content-ClientRequest mt-2">
+                <Spinner animation="border" variant="info" />
+            </div>
+        );
+    } else if (isAuthenticated) {
+        return <Redirect to="/dashboard" />;
+    } else {
+        body = (
+            <>
+                {authRoute === 'login' && <LoginForm />}
+                {authRoute === 'register' && <RegisterForm />}
+            </>
+        );
+    }
 
     return (
         <div className="landing">
