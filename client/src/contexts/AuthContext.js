@@ -52,7 +52,7 @@ const AuthContextProvider = ({ children }) => {
             if (response.data.success) {
                 localStorage.setItem(
                     LOCAL_STORAGE_TOKEN_NAME,
-                    response.data.accessToken,
+                    response.data.accessToken
                 );
             }
 
@@ -70,12 +70,12 @@ const AuthContextProvider = ({ children }) => {
         try {
             const response = await axios.post(
                 `${apiUrl}/auth/register`,
-                userForm,
+                userForm
             );
             if (response.data.success) {
                 localStorage.setItem(
                     LOCAL_STORAGE_TOKEN_NAME,
-                    response.data.accessToken,
+                    response.data.accessToken
                 );
             }
 
