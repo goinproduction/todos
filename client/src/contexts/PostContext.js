@@ -26,7 +26,7 @@ const PostContextProvider = ({ children }) => {
 
     // Show toast message
     const [showToast, setShowToast] = useState({
-        show: true,
+        show: false,
         message: '',
         type: null,
     });
@@ -84,7 +84,7 @@ const PostContextProvider = ({ children }) => {
         try {
             const response = await axios.put(
                 `${apiUrl}/posts/${updatedPost._id}`,
-                updatedPost,
+                updatedPost
             );
             if (response.data.success) {
                 dispatch({ type: UPDATE_POST, payload: response.data.post });

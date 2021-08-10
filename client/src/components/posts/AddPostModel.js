@@ -50,45 +50,45 @@ const AddPostModal = () => {
             </Modal.Header>
             <Form onSubmit={onSubmit}>
                 <Modal.Body>
-                    <Form.Group className="my-3">
+                    <Form.Group className='my-3'>
                         <Form.Control
-                            type="text"
-                            placeholder="Title"
-                            name="title"
+                            type='text'
+                            placeholder='Title'
+                            name='title'
                             required
-                            aria-describedby="title-help"
+                            aria-describedby='title-help'
                             value={title}
                             onChange={onChaneNewPostForm}
                         />
-                        <Form.Text id="title-help" muted>
+                        <Form.Text id='title-help' muted>
                             Required
                         </Form.Text>
                     </Form.Group>
                     <Form.Group>
                         <Form.Control
-                            as="textarea"
-                            placeholder="Description"
+                            as='textarea'
+                            placeholder='Description'
                             rows={3}
-                            name="description"
+                            name='description'
                             value={description}
                             onChange={onChaneNewPostForm}
                         />
                     </Form.Group>
-                    <Form.Group className="my-3">
+                    <Form.Group className='my-3'>
                         <Form.Control
-                            type="text"
-                            placeholder="Tutorial URL"
-                            name="url"
+                            type='text'
+                            placeholder='Tutorial URL'
+                            name='url'
                             value={url}
                             onChange={onChaneNewPostForm}
                         />
                     </Form.Group>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={closeDialog}>
+                    <Button variant='secondary' onClick={closeDialog}>
                         Cancel
                     </Button>
-                    <Button variant="primary" type="submit">
+                    <Button variant='primary' type='submit'>
                         Create
                     </Button>
                 </Modal.Footer>

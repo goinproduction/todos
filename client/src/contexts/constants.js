@@ -1,7 +1,7 @@
 export const apiUrl =
     process.env.NODE_ENV !== 'production'
         ? 'http://localhost:5000/api'
-        : 'http://serene-caverns-47305.herokuapp.com/api';
+        : 'https://serene-caverns-47305.herokuapp.com/api';
 
 export const LOCAL_STORAGE_TOKEN_NAME = 'mern-app';
 
