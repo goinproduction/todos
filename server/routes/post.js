@@ -41,7 +41,11 @@ router.post('/', verifyToken, async (req, res) => {
         });
         await newPost.save();
 
-        res.json({ success: true, message: 'Successfully', post: newPost });
+        res.json({
+            success: true,
+            message: 'Post created successfully',
+            post: newPost,
+        });
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -72,7 +76,7 @@ router.put('/:id', verifyToken, async (req, res) => {
         updatedPost = await Post.findOneAndUpdate(
             postUpdateCondition,
             updatedPost,
-            { new: true }
+            { new: true },
         );
 
         // User not authorised to update
@@ -82,8 +86,8 @@ router.put('/:id', verifyToken, async (req, res) => {
                 message: 'Post not found or user not authorised',
             });
         res.json({
-            succeess: true,
-            message: 'Update successfully',
+            success: true,
+            message: 'Post updated successfully',
             post: updatedPost,
         });
     } catch (error) {
@@ -110,8 +114,8 @@ router.delete('/:id', verifyToken, async (req, res) => {
                 message: 'Post not found or user not authorised',
             });
         res.json({
-            succeess: true,
-            message: 'Delete successfully',
+            success: true,
+            message: 'Post deleted successfully',
             post: deletedPost,
         });
     } catch (error) {

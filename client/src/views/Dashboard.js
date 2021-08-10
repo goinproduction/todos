@@ -11,6 +11,8 @@ import AddPostModel from '../components/posts/AddPostModel';
 import addIcon from '../assets/plus-circle-fill.svg';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
+import Toast from 'react-bootstrap/Toast';
+import UpdatePostModal from '../components/posts/UpdatePostModal';
 
 const Dashboard = () => {
     // Contexts
@@ -21,9 +23,11 @@ const Dashboard = () => {
         },
     } = useContext(AuthContext);
     const {
-        postState: { posts, postsLoading },
+        postState: { post, posts, postsLoading },
         getPosts,
-        setShowAddPostModel,
+        setShowAddPostModal,
+        showToast: { show, message, type },
+        setShowToast,
     } = useContext(PostContext);
 
     // Start: Get all posts
@@ -42,12 +46,17 @@ const Dashboard = () => {
                 <Card className="text-center mx-5 my-5">
                     <Card.Header as="h1">Hi {username}</Card.Header>
                     <Card.Body>
-                        <Card.Title>Welcome</Card.Title>
+                        <Card.Title>Todos</Card.Title>
                         <Card.Text>
                             Click the button below to track your first skill to
                             learn
                         </Card.Text>
-                        <Button variant="primary">LearnApp</Button>
+                        <Button
+                            variant="primary"
+                            onClick={setShowAddPostModal.bind(this, true)}
+                        >
+                            Add
+                        </Button>
                     </Card.Body>
                 </Card>
             </>
@@ -69,7 +78,7 @@ const Dashboard = () => {
                 >
                     <Button
                         className="btn-floating"
-                        onClick={setShowAddPostModel.bind(this, true)}
+                        onClick={setShowAddPostModal.bind(this, true)}
                     >
                         <img
                             src={addIcon}
@@ -86,6 +95,24 @@ const Dashboard = () => {
         <>
             {body}
             <AddPostModel />
+            {post !== null && <UpdatePostModal />}
+            {/* Show toast message */}
+            <Toast
+                show={show}
+                style={{ position: 'fixed', top: '10%', right: '10px' }}
+                className={`bg-${type} text-white`}
+                onClose={setShowToast.bind(this, {
+                    show: false,
+                    message: '',
+                    type: null,
+                })}
+                delay={3000}
+                autohide
+            >
+                <Toast.Body>
+                    <strong>{message}</strong>
+                </Toast.Body>
+            </Toast>
         </>
     );
 };

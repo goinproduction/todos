@@ -9,9 +9,10 @@ const About = () => {
                 <Button
                     variant="primary"
                     href="https://www.facebook.com/itdev126"
+                    target="_blank"
                     size="lg"
                 >
-                    Contact me
+                    Contact me!
                 </Button>
             </Col>
         </Row>

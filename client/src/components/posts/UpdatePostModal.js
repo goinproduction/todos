@@ -1,52 +1,52 @@
-import React, { useContext, useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import { useContext, useState, useEffect } from 'react';
 import { PostContext } from '../../contexts/PostContext';
 
-const AddPostModal = () => {
+const UpdatePostModal = () => {
     // Contexts
-    const { showAddPostModal, setShowAddPostModal, addPost, setShowToast } =
-        useContext(PostContext);
+    const {
+        postState: { post },
+        showUpdatePostModal,
+        setShowUpdatePostModal,
+        updatePost,
+        setShowToast,
+    } = useContext(PostContext);
 
     // State
-    const [newPost, setNewPost] = useState({
-        title: '',
-        description: '',
-        url: '',
-        status: 'TO LEARN',
-    });
-    const { title, description, url } = newPost;
-    const onChaneNewPostForm = (event) =>
-        setNewPost({ ...newPost, [event.target.name]: event.target.value });
+    const [updatedPost, setUpdatedPost] = useState(post);
+
+    const { title, description, url, status } = updatedPost;
+
+    useEffect(() => setUpdatedPost(post), [post]);
+
+    const onChangeUpdatedPostForm = (event) =>
+        setUpdatedPost({
+            ...updatedPost,
+            [event.target.name]: event.target.value,
+        });
 
     const closeDialog = () => {
-        resetAddPostData();
+        setUpdatedPost(post);
+        setShowUpdatePostModal(false);
     };
+
     const onSubmit = async (event) => {
         event.preventDefault();
-
-        const { success, message } = await addPost(newPost);
-        resetAddPostData();
+        const { success, message } = await updatePost(updatedPost);
+        setShowUpdatePostModal(false);
         setShowToast({
             show: true,
             message,
             type: success ? 'success' : 'danger',
         });
     };
-    const resetAddPostData = () => {
-        setNewPost({
-            title: '',
-            description: '',
-            url: '',
-            status: 'TO LEARN',
-        });
-        setShowAddPostModal(false);
-    };
+
     return (
-        <Modal show={showAddPostModal} onHide={closeDialog}>
+        <Modal show={showUpdatePostModal} onHide={closeDialog}>
             <Modal.Header closeButton>
-                <Modal.Title>What do you want to learn?</Modal.Title>
+                <Modal.Title>Making progress?</Modal.Title>
             </Modal.Header>
             <Form onSubmit={onSubmit}>
                 <Modal.Body>
@@ -58,7 +58,7 @@ const AddPostModal = () => {
                             required
                             aria-describedby="title-help"
                             value={title}
-                            onChange={onChaneNewPostForm}
+                            onChange={onChangeUpdatedPostForm}
                         />
                         <Form.Text id="title-help" muted>
                             Required
@@ -67,21 +67,33 @@ const AddPostModal = () => {
                     <Form.Group>
                         <Form.Control
                             as="textarea"
-                            placeholder="Description"
                             rows={3}
+                            placeholder="Description"
                             name="description"
                             value={description}
-                            onChange={onChaneNewPostForm}
+                            onChange={onChangeUpdatedPostForm}
                         />
                     </Form.Group>
                     <Form.Group className="my-3">
                         <Form.Control
                             type="text"
-                            placeholder="Tutorial URL"
+                            placeholder="Youtube Tutorial URL"
                             name="url"
                             value={url}
-                            onChange={onChaneNewPostForm}
+                            onChange={onChangeUpdatedPostForm}
                         />
+                    </Form.Group>
+                    <Form.Group className="mb-3">
+                        <Form.Control
+                            as="select"
+                            value={status}
+                            name="status"
+                            onChange={onChangeUpdatedPostForm}
+                        >
+                            <option value="TO LEARN">TO LEARN</option>
+                            <option value="LEARNING">LEARNING</option>
+                            <option value="LEARNED">LEARNED</option>
+                        </Form.Control>
                     </Form.Group>
                 </Modal.Body>
                 <Modal.Footer>
@@ -97,4 +109,4 @@ const AddPostModal = () => {
     );
 };
 
-export default AddPostModal;
+export default UpdatePostModal;
