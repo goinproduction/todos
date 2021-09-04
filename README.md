@@ -20,6 +20,8 @@
             <li>Node.js</li>
             <li>Express.js</li>
             <li>MongoDB</li>
+            <li>Argon2</li>
+            <li>JWT</li>
         </ol>
     </li>
 </ul>
