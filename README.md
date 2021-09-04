@@ -3,7 +3,7 @@
 <ul>
     <li>Đăng ký</li>
     <li>Đăng nhập</li>
-    <li>Thêm, sửa, xóa công việc/li>
+    <li>Thêm, sửa, xóa công việc</li>
 </ul>
 <h1 style="text-align: center;">Công nghệ đã sử dụng</h1>
 <ul>
