@@ -1,42 +1,29 @@
 import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
 import { Link } from 'react-router-dom';
 import { useContext, useState } from 'react';
 import { AuthContext } from '../../contexts/AuthContext';
 import AlertMessage from '../layouts/AlertMessage';
+import { Formik, Form, Field } from 'formik';
+import * as Yup from 'yup';
 
 const RegisterForm = () => {
     // Context
     const { registerUser } = useContext(AuthContext);
-
-    // Local state
-    const [registerForm, setRegisterForm] = useState({
-        username: '',
-        password: '',
-        confirmPassword: '',
+    const RegisterSchema = Yup.object().shape({
+        username: Yup.string()
+            .email('Địa chỉ email không hợp lệ')
+            .required('Vui lòng nhập email'),
+        password: Yup.string()
+            .min(4, 'Mật khẩu phải từ 4 đến 60 kí tự')
+            .max(60, 'Mật khẩu phải từ 4 đến 60 kí tự')
+            .required('Vui lòng nhập mật khẩu'),
+        confirmPassword: Yup.string()
+            .oneOf([Yup.ref('password'), null], 'Mật khẩu chưa khớp')
+            .required('Vui lòng nhập trường này'),
     });
-
-    const [alert, setAlert] = useState(null);
-
-    const { username, password, confirmPassword } = registerForm;
-
-    const onChangeRegisterForm = (event) =>
-        setRegisterForm({
-            ...registerForm,
-            [event.target.name]: event.target.value,
-        });
-
-    const register = async (event) => {
-        event.preventDefault();
-
-        if (password !== confirmPassword) {
-            setAlert({ type: 'danger', message: 'Passwords do not match' });
-            setTimeout(() => setAlert(null), 5000);
-            return;
-        }
-
+    const register = async (data) => {
         try {
-            const registerData = await registerUser(registerForm);
+            const registerData = await registerUser(data);
             if (!registerData.success) {
                 setAlert({ type: 'danger', message: registerData.message });
                 setTimeout(() => setAlert(null), 5000);
@@ -45,55 +32,63 @@ const RegisterForm = () => {
             console.log(error);
         }
     };
-
+    const [alert, setAlert] = useState(null);
     return (
-        <>
-            <Form className="my-4" onSubmit={register}>
-                <AlertMessage info={alert} />
-
-                <Form.Group className="my-3">
-                    <Form.Control
-                        type="text"
-                        placeholder="Username"
-                        name="username"
-                        required
-                        value={username}
-                        onChange={onChangeRegisterForm}
-                    />
-                </Form.Group>
-                <Form.Group>
-                    <Form.Control
-                        type="password"
-                        placeholder="Password"
-                        name="password"
-                        required
-                        value={password}
-                        onChange={onChangeRegisterForm}
-                    />
-                </Form.Group>
-                <Form.Group className="my-3">
-                    <Form.Control
-                        type="password"
-                        placeholder="Confirm Password"
-                        name="confirmPassword"
-                        required
-                        value={confirmPassword}
-                        onChange={onChangeRegisterForm}
-                    />
-                </Form.Group>
-                <Button variant="success" type="submit">
-                    Register
-                </Button>
-            </Form>
-            <p>
-                Already have an account?
-                <Link to="/login">
-                    <Button variant="info" size="sm" className="ml-2">
-                        Login
-                    </Button>
-                </Link>
-            </p>
-        </>
+        <Formik
+            initialValues={{ username: '', password: '', confirmPassword: '' }}
+            validationSchema={RegisterSchema}
+            onSubmit={ values => {           
+                register(values);
+            }}
+        >
+            {({ errors, touched }) => (
+                <>
+                    <Form>
+                        <AlertMessage info={alert} />
+                        <Field
+                            name='username'
+                            placeholder='Địa chỉ email'
+                            className='input-style my-1'
+                            type='email'
+                        />
+                        {errors.username && touched.username ? (
+                            <p className='error-message'>{errors.username}</p>
+                        ) : null}
+                        <Field
+                            name='password'
+                            placeholder='Mật khẩu'
+                            className='input-style mb-1 mt-2'
+                            type='password'
+                        />
+                        {errors.password && touched.password ? (
+                            <p className='error-message'>{errors.password}</p>
+                        ) : null}
+                        <Field
+                            name='confirmPassword'
+                            placeholder='Nhập lại mật khẩu'
+                            className='input-style mb-1 mt-2'
+                            type='password'
+                        />
+                        {errors.confirmPassword && touched.confirmPassword ? (
+                            <p className='error-message'>
+                                {errors.confirmPassword}
+                            </p>
+                        ) : null}
+                        <button type='submit' className='button-style'>
+                            Đăng ký
+                        </button>
+                    </Form>
+                    <p className='mt-3'>
+                        Bạn đã có tài khoản?
+                        <Link to='/login'>
+                            <Button variant='info' size='sm' className='ms-2'>
+                                Đăng nhập
+                            </Button>
+                        </Link>
+                    </p>
+                </>
+            )}
+        </Formik>
     );
 };
 

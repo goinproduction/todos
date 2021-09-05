@@ -1,6 +1,5 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
-// import Form from 'react-bootstrap/Form';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../../contexts/AuthContext';
 import AlertMessage from '../layouts/AlertMessage';
@@ -10,18 +9,7 @@ import * as Yup from 'yup';
 const LoginForm = () => {
     // Context
     const { loginUser } = useContext(AuthContext);
-
-    // Local state
-    const [loginForm, setLoginForm] = useState({
-        username: '',
-        password: '',
-    });
-
     const [alert, setAlert] = useState(null);
-
-    // destructure from local state
-    // const { username, password } = loginForm;
-    // Login schema
     const LoginSchema = Yup.object().shape({
         username: Yup.string()
             .email('Địa chỉ email không hợp lệ')
@@ -31,14 +19,9 @@ const LoginForm = () => {
             .max(60, 'Mật khẩu phải từ 4 đến 60 kí tự')
             .required('Vui lòng nhập mật khẩu'),
     });
-    const onChangeLoginForm = (event) =>
-        setLoginForm({ ...loginForm, [event.target.name]: event.target.value });
-
-    const login = async (event) => {
-        event.preventDefault();
-
+    const login = async (data) => {
         try {
-            const loginData = await loginUser(loginForm);
+            const loginData = await loginUser(data);
             if (loginData.success) {
                 // history.push('/dashboard');
             } else {
@@ -53,7 +36,9 @@ const LoginForm = () => {
         <Formik
             initialValues={{ username: '', password: '' }}
             validationSchema={LoginSchema}
-            onSubmit={(values) => setLoginForm(values)}
+            onSubmit={(values) => {
+                login(values);
+            }}
         >
             {({ errors, touched }) => (
                 <>
@@ -82,7 +67,7 @@ const LoginForm = () => {
                         </button>
                     </Form>
                     <p className='mt-3'>
-                        Bạn đã có tài khoản?
+                        Bạn chưa có tài khoản?
                         <Link to='/register'>
                             <Button variant='info' size='sm' className='ms-2'>
                                 Đăng ký
