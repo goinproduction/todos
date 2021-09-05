@@ -12,6 +12,7 @@
         <ol type="1">
             <li>ReactJS</li>
             <li>React-bootstrap</li>
+            <li>Formik/ Yup</li>
         </ol>
     </li>
     <li>
