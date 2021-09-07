@@ -11,7 +11,7 @@
         <h3>Frontend</h3>
         <ol type="1">
             <li>ReactJS</li>
-            <li>React-bootstrap</li>
+            <li>Bootstrap</li>
             <li>Formik/ Yup</li>
         </ol>
     </li>
